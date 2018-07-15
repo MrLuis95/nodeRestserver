@@ -13,5 +13,5 @@
   =============*/ 
   process.env.MongoDB = process.env.NODE_ENV==='dev'?
       'mongodb://localhost:27017/cafe':
-      'mongodb://usr:cafe2018@ds237641.mlab.com:37641/cafe';
+      process.env.MONGO_URI;
 
