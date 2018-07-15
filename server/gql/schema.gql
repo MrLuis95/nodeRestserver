@@ -1,0 +1,28 @@
+type Query {
+    greetings: String,
+    greeting(name: String!): String,
+    
+    user(id:String!): String,
+}
+
+type Mutation{
+    createUser(input:UserInput):User
+    updateUser(id: String!, input:UserInput): User
+}
+
+type User{
+    id: String,
+    name: String,
+    email: String,
+    role:String
+    status:Boolean,
+    google:Boolean
+}
+
+input UserInput{
+    name: String,
+    email: String,
+    password: String,
+    role:String
+}
+
