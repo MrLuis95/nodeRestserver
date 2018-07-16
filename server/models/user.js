@@ -43,12 +43,14 @@ let userSchema = new Schema({
     },
 });
 
-userSchema.plugin(unique_validator,{message:'{PATH} has been already registered'});
-userSchema.methods.toJson = function(){
+userSchema.methods.toJSON = function(){
     let user = this;
     let userObject = user.toObject();
     delete userObject.password;
     return userObject;
 }
+
+userSchema.plugin(unique_validator,{message:'{PATH} has been already registered'});
+
 
 module.exports= mongoose.model('user',userSchema);

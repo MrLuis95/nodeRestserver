@@ -2,53 +2,93 @@
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const {
+    saveUser
+} = require('./user')
 
+const jsonResponse = require('../include/json_response');
+
+let getToken = (user) => {
+    return jwt.sign({
+        user: user
+    }, process.env.SEED, {
+        expiresIn: process.env.EXPIRATION_DATE
+    });
+}
 
 let getUser = (args, pass) => {
-    let uopIncorrect = {
-        status: 400,
-        data: {
-            ok: false,
-            err: {
-                message: "Usuario o contraseña incorrecta"
-            }
-        }
-    }
+
     return new Promise((resolve, reject) => {
-        User.findOne(args, (err, userDB) => {
+        User.findOne(args,(err, userDB) => {
             if (err) {
-                reject({
-                    status: 500,
-                    data: {
-                        ok: false,
-                        err
-                    }
-                });
+                reject(jsonResponse.error(500, err));
             }
             if (!userDB) {
-                reject(uopIncorrect);
+                reject(jsonResponse.error(400, {
+                    message: "Usuario o contraseña incorrecta"
+                }));
             }
             if (userDB && !bcrypt.compareSync(pass, userDB.password)) {
-                reject(uopIncorrect);
+                reject(jsonResponse.error(400, {
+                    message: "Usuario o contraseña incorrecta"
+                }));
             }
-            let token = jwt.sign({
-                user: userDB
-            }, process.env.SEED, {
-                expiresIn: 60 * 60 * 24 * 30
-            });
-            resolve({
-                status: 200,
-                data: {
-                    ok: true,
-                    user: userDB,
-                    token
-                }
-            });
+            let token = getToken(userDB);
+            resolve(jsonResponse.ok(200, {
+                user: userDB,
+                token
+            }));
 
         });
     });
 }
 
+let googleAuth = (guser) => {
+    let args = {
+        email: guser.email
+    }
+    return new Promise((resolve, reject) => {
+        User.findOne(args, (err, userDB) => {
+            if (err) {
+                reject(jsonResponse.error(500, err));
+            }
+            if (userDB) {
+                if (!userDB.google) {
+                    reject(jsonResponse.error(400, {
+                        message: "Use normal auth"
+                    }))
+                } else {
+                    let token = getToken(userDB);
+                    resolve(jsonResponse.ok(200, {
+                        user: userDB,
+                        token
+                    }));
+                }
+            } else {
+                guser.password = ':)';
+                let user = new User({
+                    name: guser.name,
+                    email: guser.email,
+                    password: bcrypt.hashSync(guser.password, 10),
+                    role: guser.role,
+                    google: guser.google,
+                    img: guser.picture
+                });
+                let token = getToken(user);
+                saveUser(user).then((objRes) => resolve(jsonResponse.ok(200, {
+                        newUser: true,
+                        user: user,
+                        token
+                    })))
+                    .catch((err) => reject(jsonResponse.error(500, err)));
+
+            }
+        });
+    });
+
+}
+
 module.exports = {
-    getUser
+    getUser,
+    googleAuth
 }

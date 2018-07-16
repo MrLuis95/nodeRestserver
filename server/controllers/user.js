@@ -2,7 +2,6 @@ const User = require('../models/user');
 
 let saveUser = (user) => {
     return new Promise((resolve, reject) => {
-        console.log('start');
         user.save((err, user) => {
             if (err) {
                 reject({
