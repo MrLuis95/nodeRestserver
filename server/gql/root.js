@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs');
-const controllers = require('../controllers/controllers');
+const controllers = require('../include/controllers');
 const User = require('../models/user');
 
 let createUser = (data) => {
@@ -12,7 +12,23 @@ let createUser = (data) => {
     });
     return controllers.userController.saveUser(user)
     .then(obj=>toUser(obj.user))
-    .catch(obj=>obj)
+    .catch(obj=>obj);
+}
+
+let updateUser = (data) => {
+    let body = data.input
+    let id = data.id; 
+    return controllers.userController.updateUser(id,body)
+    .then(obj=>toUser(obj.user))
+    .catch(obj=>obj);
+}
+
+let getUser = (data) =>{
+    let args = {"_id":data.id};
+    console.log(args);
+    return controllers.userController.getUser(args)
+    .then(obj=>toUser(obj.user[0]))
+    .catch(obj=>obj);
 }
 
 let toUser = (temp) => {
@@ -33,11 +49,9 @@ const root = {
     greeting: ({
         name
     }) => `Hello ${ name }`,
-    user: ({
-        id
-    }) => "get user " + id,
+    user: getUser,
     createUser: createUser,
-    updateUser: (data) => "update user",
+    updateUser: updateUser,
 };
 
 

@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({
 // parse application/json
 app.use(bodyParser.json())
 
-app.use(require('./routes/user'));
+app.use(require('./include/routes'));
 app.use(require('./graphql'))
 mongoose.connect(process.env.MongoDB, {
     useNewUrlParser: true

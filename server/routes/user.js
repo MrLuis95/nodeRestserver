@@ -3,12 +3,13 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const _ = require('underscore');
 const User = require('../models/user');
-const {userController} = require('../controllers/controllers');
+const {userController} = require('../include/controllers');
+const {auth} = require('../include/middlewares');
 
 
 const app = express();
 
-app.get('/users', function (req, res) {
+app.get('/users', auth.verifyToken ,function (req, res) {
     let from = Number(req.query.from) || 0;
     let limit = Number(req.query.limit) || 5;
     let args={"status":true} 
@@ -17,7 +18,14 @@ app.get('/users', function (req, res) {
     .catch((err) => res.status(400).send(err))
 });
 
-app.post('/user', function (req, res) {
+app.get('/user/:id', auth.verifyToken, function (req, res) {
+    let args={"_id":req.params.id} 
+    userController.getUser(args)
+    .then((objRes) => res.send(objRes))
+    .catch((err) => res.status(400).send(err))
+});
+
+app.post('/user', [auth.verifyToken,auth.verifyAdminRole], function (req, res) {
     let body = req.body;
     let user = new User({
         name: body.name,
@@ -30,7 +38,7 @@ app.post('/user', function (req, res) {
     .catch((err) => res.status(400).send(err));
 });
 
-app.put('/user/:id', function (req, res) {
+app.put('/user/:id', [auth.verifyToken,auth.verifyAdminRole], function (req, res) {
     let id = req.params.id;
     let body = _.pick(req.body, ['name', 'email', 'img', 'role', 'status']);
     userController.updateUser(id,body)
@@ -38,7 +46,7 @@ app.put('/user/:id', function (req, res) {
     .catch((err) => res.status(400).send(err));
 })
 
-app.delete('/user/:id', function (req, res) {
+app.delete('/user/:id', [auth.verifyToken,auth.verifyAdminRole], function (req, res) {
     let id = req.params.id;
     userController.deleteUser(id)
     .then((objRes)=> res.send(objRes))

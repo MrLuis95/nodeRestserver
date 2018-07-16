@@ -18,8 +18,8 @@ let saveUser = (user) => {
     });
 }
 
-let getUsers = (args,from,limit) => {
-    return new Promise((resolve,reject) => {
+let getUsers = (args, from, limit) => {
+    return new Promise((resolve, reject) => {
         User.find(args, 'name email status role google img')
             .limit(limit)
             .skip(from)
@@ -48,8 +48,26 @@ let getUsers = (args,from,limit) => {
     });
 }
 
-let updateUser = (id,body)=>{
-    return new Promise((resolve,reject)=>{
+let getUser = (args) => {
+    return new Promise((resolve, reject) => {
+        User.find(args, 'name email status role google img')
+            .exec((err, user) => {
+                if (err) {
+                    reject({
+                        ok: false,
+                        err
+                    });
+                }
+                resolve({
+                    ok: true,
+                    user
+                });
+            });
+    });
+}
+
+let updateUser = (id, body) => {
+    return new Promise((resolve, reject) => {
         User.findByIdAndUpdate(id, body, {
             new: true,
             runValidators: true
@@ -68,23 +86,32 @@ let updateUser = (id,body)=>{
     });
 }
 
-let deleteUser = (id)=>{
-    let status={status:false}
-    return new Promise((resolve,reject)=>{
-        User.findByIdAndUpdate(id,status,{new:true},(err,userDeleted)=>{
+let deleteUser = (id) => {
+    let status = {
+        status: false
+    }
+    return new Promise((resolve, reject) => {
+        User.findByIdAndUpdate(id, status, {
+            new: true
+        }, (err, userDeleted) => {
             if (err) {
                 reject({
                     ok: false,
                     err
                 });
             }
-            if(!userDeleted){
+            if (!userDeleted) {
                 reject({
                     ok: false,
-                    err: {message:"User not found"}
-                }); 
+                    err: {
+                        message: "User not found"
+                    }
+                });
             }
-            resolve({ok:true, user:userDeleted})
+            resolve({
+                ok: true,
+                user: userDeleted
+            })
         });
     });
 }
@@ -92,6 +119,7 @@ let deleteUser = (id)=>{
 module.exports = {
     saveUser,
     getUsers,
+    getUser,
     updateUser,
     deleteUser
 };

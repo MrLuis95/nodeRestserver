@@ -2,12 +2,12 @@ type Query {
     greetings: String,
     greeting(name: String!): String,
     
-    user(id:String!): String,
+    user(id:String!): User,
 }
 
 type Mutation{
-    createUser(input:UserInput):User
-    updateUser(id: String!, input:UserInput): User
+    createUser(input:UserInput!):User
+    updateUser(id: String!, input:UserInput!): User
 }
 
 type User{
