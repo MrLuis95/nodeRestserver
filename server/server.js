@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
-
+const subdomain = require('express-subdomain');
 const app = express();
 
 
@@ -15,10 +15,11 @@ app.use(bodyParser.urlencoded({
 // parse application/json
 app.use(bodyParser.json())
 
-app.use(express.static(path.resolve(__dirname,'../public')));
 
-app.use(require('./include/routes'));
-app.use(require('./graphql'))
+
+app.use(subdomain('api',require('./include/routes')));
+app.use(subdomain('graphql',require('./graphql')));
+app.use(express.static(path.resolve(__dirname,'../public')));
 mongoose.connect(process.env.MongoDB, {
     useNewUrlParser: true
 }, (err, res) => {
