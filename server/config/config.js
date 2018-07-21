@@ -16,7 +16,7 @@ process.env.MongoDB = process.env.MONGO_URI || 'mongodb://localhost:27017/cafe';
 /*=============
     JWT
   =============*/
-process.env.EXPIRATION_DATE = 60 * 60 * 24 * 30;
+process.env.EXPIRATION_DATE = "30d";
 process.env.SEED = process.env.SEED || 'seed-de-desarrollo';
 
 /*=============
@@ -24,3 +24,9 @@ process.env.SEED = process.env.SEED || 'seed-de-desarrollo';
   =============*/
 
   process.env.CLIENT_ID = process.env.CLIENT_ID || '844734583440-0s6nddlfesisse4qu378bi4alm4dq73r.apps.googleusercontent.com';
+
+/*=============
+    Log
+  =============*/
+
+  process.env.LOG_LEVEL = process.env.LOG_LEVEL || 'DEBUG';

@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const controllers = require('../include/controllers');
-const User = require('../models/user');
+const User = require('../include/models').userModel;
 
 let createUser = (data) => {
     let body = data.input

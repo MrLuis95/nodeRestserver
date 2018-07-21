@@ -53,4 +53,4 @@ userSchema.methods.toJSON = function(){
 userSchema.plugin(unique_validator,{message:'{PATH} has been already registered'});
 
 
-module.exports= mongoose.model('user',userSchema);
+module.exports= mongoose.model('User',userSchema);

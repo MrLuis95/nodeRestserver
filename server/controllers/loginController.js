@@ -1,12 +1,10 @@
 'use strict'
-const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const {
-    saveUser
-} = require('./user')
 
+const User = require('../include/models').userModel;
 const jsonResponse = require('../include/json_response');
+const saveUser = require('./userController').saveUser
 
 let getToken = (user) => {
     return jwt.sign({
@@ -16,10 +14,8 @@ let getToken = (user) => {
     });
 }
 
-let getUser = (args, pass) => {
-
-    return new Promise((resolve, reject) => {
-        User.findOne(args,(err, userDB) => {
+let getUser = (args, pass) => new Promise((resolve, reject) => {
+        User.findOne(args, (err, userDB) => {
             if (err) {
                 reject(jsonResponse.error(500, err));
             }
@@ -41,7 +37,7 @@ let getUser = (args, pass) => {
 
         });
     });
-}
+
 
 let googleAuth = (guser) => {
     let args = {

@@ -2,9 +2,9 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const _ = require('underscore');
-const User = require('../models/user');
-const {userController} = require('../include/controllers');
-const {auth} = require('../include/middlewares');
+const User = require('../include/models').userModel;
+const userController = require('../include/controllers').userController;
+const auth = require('../include/middlewares').auth;
 
 
 const app = express();

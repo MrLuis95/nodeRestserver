@@ -1,7 +1,5 @@
 const express = require('express');
-const {
-    loginController
-} = require('../include/controllers');
+const loginController = require('../include/controllers').loginController;
 const google = require('../include/google');
 
 const app = express();
