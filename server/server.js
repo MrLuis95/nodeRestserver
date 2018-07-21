@@ -17,10 +17,14 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 
-
-app.use(subdomain('api',require('./include/routes')));
-app.use(subdomain('graphql',require('./routes/graphql')));
-app.use(express.static(path.resolve(__dirname,'../public')));
+if (process.env.NODE_ENV === 'dev') {
+    app.use(subdomain('api', require('./include/routes')));
+    app.use(subdomain('graphql', require('./routes/graphql')));
+} else {
+    app.use(require('./include/routes'));
+    app.use(require('./routes/graphql'));
+}
+app.use(express.static(path.resolve(__dirname, '../public')));
 mongoose.connect(process.env.MongoDB, {
     useNewUrlParser: true
 }, (err, res) => {
