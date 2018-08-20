@@ -3,6 +3,9 @@ const jwt = require('jsonwebtoken');
 let verifyToken = (req,res,next)=>{
     let token = req.get('Authorization')
     if(!token){
+        token = req.query.token;
+    }
+    if(!token){
         res.status(401).send({ok:false,err:{message:'Invalid authorization'}});
     }
     jwt.verify(token, process.env.SEED, (err,decoded)=>{

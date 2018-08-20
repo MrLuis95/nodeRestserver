@@ -1,4 +1,7 @@
-const auth = require('../middlewares/auth');
+const importer = require('../util/importer');
+let middlewares = [
+    'auth',
+    'upload'
+];
 
-
-module.exports={auth}
+module.exports=importer.imports('middlewares',middlewares);

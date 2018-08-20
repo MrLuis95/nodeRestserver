@@ -17,7 +17,7 @@ app.get('/products', auth.verifyToken, (req, res) => {
         }));
     }
     let from = (page - 1) * limit;
-
+    
     productController.findProducts(limit, from)
         .then(obj => res.status(obj.status).send(obj.data))
         .catch(err => res.status(err.status).send(err.data));

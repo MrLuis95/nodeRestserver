@@ -1,7 +1,13 @@
-const express = require('express');
-const app= express();
-app.use(require('../routes/user'));
-app.use(require('../routes/login'));
-app.use(require('../routes/category'));
-app.use(require('../routes/product'));
-module.exports = app;
+'use strict'
+const importer = require('../util/importer');
+let routes = [
+    'user',
+    'login', 
+    'category', 
+    'product', 
+    'upload',
+    'images'
+];
+
+
+module.exports = importer.importRoutes(routes);

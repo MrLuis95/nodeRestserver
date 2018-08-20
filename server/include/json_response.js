@@ -22,6 +22,7 @@ let ok = (status, obj) => {
     return res;
 }
 
+
 module.exports = {
     error,
     ok

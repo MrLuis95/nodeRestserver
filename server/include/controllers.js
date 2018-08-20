@@ -1,8 +1,11 @@
+'use strict'
 
-const userController = require('../controllers/userController');
-const loginController = require('../controllers/loginController');
-const categoryController = require('../controllers/categoryController');
-const productController = require('../controllers/productController');
-module.exports= {userController,loginController,categoryController,productController}
-
-
+const importer = require('../util/importer');
+let controllers = [
+    'userController', 
+    'loginController',
+    'categoryController',
+    'productController',
+    'uploadController'
+];
+module.exports = importer.imports('controllers',controllers);
