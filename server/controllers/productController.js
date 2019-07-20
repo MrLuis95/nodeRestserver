@@ -50,7 +50,7 @@ let paginator = (from, limit, count) => new Object({
         },
         total: count
     }
-})
+});
 
 let findProduct = (id) => new Promise((resolve, reject) => {
     Product.findById(id).findOne({available:true})
