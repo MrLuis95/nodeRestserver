@@ -20,8 +20,8 @@ let configure = (className)=>log4js.configure({
     },
     categories: {
         default: {
-            appenders: ['out'],
-            level: 'DEBUG'||process.env.LOG_LEVEL
+            appenders: [process.env.LOG_APPENDER||'logFile'],
+            level: process.env.LOG_LEVEL||'DEBUG'
         }
     }
 });

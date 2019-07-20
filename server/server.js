@@ -19,6 +19,7 @@ app.use(bodyParser.json());
 
 
 if (process.env.NODE_ENV === 'dev') {
+    log.info('using subdomains')
     app.use(subdomain('api', require('./include/routes')));
     app.use(subdomain('graphql', require('./routes/graphql')));
 } else {
@@ -27,6 +28,7 @@ if (process.env.NODE_ENV === 'dev') {
 }
 app.use(express.static(path.resolve(__dirname, '../public')));
 mongoose.connect(process.env.MongoDB, {
+    useCreateIndex: true,
     useNewUrlParser: true
 }, (err, res) => {
     if (err) throw err;

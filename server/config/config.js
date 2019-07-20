@@ -30,3 +30,5 @@ process.env.SEED = process.env.SEED || 'seed-de-desarrollo';
   =============*/
 
   process.env.LOG_LEVEL = process.env.LOG_LEVEL || 'DEBUG';
+
+  process.env.LOG_APPENDER = process.env.LOG_APPENDER || 'out';
